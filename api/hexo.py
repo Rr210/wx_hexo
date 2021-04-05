@@ -17,23 +17,19 @@ results = {
 }
 
 # 请求页面信息
-def req(url):
-    # 转换成二进制，解决xpath乱码的问题
+# 转换成二进制，解决xpath乱码的问题
+# 对页面进行解析
+# 对页面的数据进行遍历处理
+def foreachs(url):
     header = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4464.5 Safari/537.36'
     }
     res = requests.get(url, headers=header).content
-    return res
-# 对页面进行解析
-def etreehtml():
-    lists = etree.HTML(req())
+    lists = etree.HTML(res)
     content = lists.xpath('//*[@id="recent-posts"]/*[@class="recent-post-item"]')
-    return content
-# 对页面的数据进行遍历处理
-def foreachs():
     # 加一个判断条件如果说遍历的是第一页，则从第二个开始
     # article =
-    for i in etreehtml()[2:]:
+    for i in content[2:]:
         title = i.xpath('div[2]/a/@title')[0]  # 文章的标题
         publish_date = i.xpath('div[2]/div[1]/*[@class="post-meta-date"]/time/@datetime')[0]  # 文章的发布时间
         article_category = i.xpath('div[2]/div[1]/*[@class="article-meta"]/a/text()')[0]   # 文章的分类
@@ -47,25 +43,19 @@ def foreachs():
         result_json.append(dict(results))
     return result_json
 # 爬取页面的总页数
-def pagenum():
-    lists = etree.HTML(req())
-    content = lists.xpath('//*[@id="pagination"]/div/a[2]/text()')
-    # print(content[0])
-    return content[0]
 # 爬取页面的文章的链接
 # 爬取子页面的数据信息
-
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.path
+        geturl = path.split('?')[1]
         for a in range(1, 9):
             if a == 1:
-                url = 'https://%s/' % path
+                url = 'https://%s/' % geturl
             else:
-                url = 'https://%s/%s' % (path, a)
+                url = 'https://%s/%s' % (geturl, a)
             # print(url)
-            req(url)
-            foreachs()
+            foreachs(url)
             print('---------------------------\n正在爬取第%s页' % a)
         print('---------------爬取完成------------------')
         print(result_json)
