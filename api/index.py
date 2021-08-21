@@ -89,7 +89,7 @@ class Blog:
             # article = re.search('<div class="content">(?P<articles>.*?)</div>', i)
             # results['article_content'] = article.group('articles').replace('\"', "'")   # 文章内容
             # results['en_publish_date'] = publish.group('Ctime')  # 转码时间
-            results['publish_date'] = publish.group('unencode')  # 未经过转码时间
+            # results['publish_date'] = publish.group('unencode')  # 未经过转码时间
             results['title'] = title.group('title')  # 文章标题
             results['cover'] = title.group('src')  # 图片地址
             results['title_url'] = title.group('link')  # 文章地址
