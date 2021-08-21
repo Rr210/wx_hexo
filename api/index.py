@@ -70,11 +70,11 @@ class Blog:
         results['update_date'] = update.group('unencode')  # 未经过转码时间
         results['article_wordCounts'] = word_count.group('wordCount')  # 文章字数
         results['read_time'] = read_t.group('TR')  # 文章阅读时长
-        try:
-            article = re.search('<article class="post-content" id="article-container">(?P<articles>.*?)</article>', self.req(child_url))
-            results['article_content'] = article.group('articles').replace('\"', "'")   # 文章内容
-        except:
-            results['article_content'] = '超出字符'  # 文章内容
+        # try:
+        #     article = re.search('<article class="post-content" id="article-container">(?P<articles>.*?)</article>', self.req(child_url))
+        #     results['article_content'] = article.group('articles').replace('\"', "'")   # 文章内容
+        # except:
+        #     results['article_content'] = '超出字符'  # 文章内容
 
 
     # 对页面的数据进行遍历处理
