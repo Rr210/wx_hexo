@@ -1,10 +1,9 @@
-import requests
-import json
+import requests, json
 from lxml import etree
-import os
-# å®šä¹‰æœ€åçš„jsonæ•°ç»„
+
+# ¶¨Òå×îºóµÄjsonÊı×é
 result_json = []
-# å®šä¹‰å¯¹è±¡
+# ¶¨Òå¶ÔÏó
 results = {
     'title': '',
     "publish_date": "",
@@ -15,68 +14,74 @@ results = {
     "read_time": "",
     "cover": ""
 }
-# floder = os.getcwd() + '/hexo_api.json'
-# if not os.path.exists(floder):
-#     os.makedirs(floder)
-# å°†çˆ¬å–çš„æ•°æ®å†™å…¥åˆ°jsonæ–‡ä»¶ä¸­
+
+
 def writer():
     with open('hexo_api.json', 'w', encoding='utf8') as f:
         json.dump(result_json, f, ensure_ascii=False)
-    # f = open('hexo_api.json', mode='wb')
-    # f.write(json.dump())
+
+
 class Blog:
     def __init__(self, url):
         self.url = url
         self.header = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4464.5 Safari/537.36'
         }
-        self.foreachs()
-    # è¯·æ±‚é¡µé¢ä¿¡æ¯
+
+    # ÇëÇóÒ³ÃæĞÅÏ¢
+
     def req(self):
-        # è½¬æ¢æˆäºŒè¿›åˆ¶ï¼Œè§£å†³xpathä¹±ç çš„é—®é¢˜
+        # ×ª»»³É¶ş½øÖÆ£¬½â¾öxpathÂÒÂëµÄÎÊÌâ
         res = requests.get(self.url, headers=self.header).content
         return res
-    # å¯¹é¡µé¢è¿›è¡Œè§£æ
+
+    # ¶ÔÒ³Ãæ½øĞĞ½âÎö
+
     def etreehtml(self):
         lists = etree.HTML(self.req())
-        content = lists.xpath('//*[@id="recent-posts"]/*[@class="recent-post-item"]')
+        content = lists.xpath(
+            '//*[@id="recent-posts"]/*[@class="recent-post-item"]')
         return content
-    # å¯¹é¡µé¢çš„æ•°æ®è¿›è¡Œéå†å¤„ç†
+
+    # ¶ÔÒ³ÃæµÄÊı¾İ½øĞĞ±éÀú´¦Àí
+
     def foreachs(self):
-        # åŠ ä¸€ä¸ªåˆ¤æ–­æ¡ä»¶å¦‚æœè¯´éå†çš„æ˜¯ç¬¬ä¸€é¡µï¼Œåˆ™ä»ç¬¬äºŒä¸ªå¼€å§‹
+        # ¼ÓÒ»¸öÅĞ¶ÏÌõ¼şÈç¹ûËµ±éÀúµÄÊÇµÚÒ»Ò³£¬Ôò´ÓµÚ¶ş¸ö¿ªÊ¼
         # article =
         for i in self.etreehtml()[2:]:
-            title = i.xpath('div[2]/a/@title')[0]  # æ–‡ç« çš„æ ‡é¢˜
-            publish_date = i.xpath('div[2]/div[1]/*[@class="post-meta-date"]/time/@datetime')[0]  # æ–‡ç« çš„å‘å¸ƒæ—¶é—´
-            article_category = i.xpath('div[2]/div[1]/*[@class="article-meta"]/a/text()')[0]   # æ–‡ç« çš„åˆ†ç±»
-            # cover = i.xpath('div[1]/a/img/@src')[0]   # æ–‡ç« å°é¢å›¾
+            title = i.xpath('div[2]/a/@title')[0]  # ÎÄÕÂµÄ±êÌâ
+            publish_date = i.xpath(
+                'div[2]/div[1]/*[@class="post-meta-date"]/time/@datetime')[0]  # ÎÄÕÂµÄ·¢²¼Ê±¼ä
+            article_category = i.xpath(
+                'div[2]/div[1]/*[@class="article-meta"]/a/text()')[0]  # ÎÄÕÂµÄ·ÖÀà
+            # cover = i.xpath('div[1]/a/img/@src')[0]   # ÎÄÕÂ·âÃæÍ¼
             # print(cover)
             # results['cover'] = cover
             results['title'] = title
             results['publish_date'] = publish_date
             results['article_category'] = article_category
-            # å°†å¯¹è±¡è½¬æ¢æˆå­—å…¸çš„å½¢å¼åœ¨è¿½åŠ åˆ°æ•°ç»„ä¸­
+            # ½«¶ÔÏó×ª»»³É×ÖµäµÄĞÎÊ½ÔÚ×·¼Óµ½Êı×éÖĞ
             result_json.append(dict(results))
-    # çˆ¬å–é¡µé¢çš„æ€»é¡µæ•°
+
+    # ÅÀÈ¡Ò³ÃæµÄ×ÜÒ³Êı
     def pagenum(self):
         lists = etree.HTML(self.req())
         content = lists.xpath('//*[@id="pagination"]/div/a[2]/text()')
         # print(content[0])
         return content[0]
-    # çˆ¬å–é¡µé¢çš„æ–‡ç« çš„é“¾æ¥
-    # çˆ¬å–å­é¡µé¢çš„æ•°æ®ä¿¡æ¯
+
+
 if __name__ == '__main__':
-    # è°ƒç”¨ç±»
-    # p = Blog()
-    for a in range(1, 9):
+    # µ÷ÓÃÀà
+    pageNum = Blog('https://rbozo.gitee.io/').pagenum()
+    for a in range(1, pageNum):
         if a == 1:
             url = 'https://rbozo.gitee.io/'
         else:
             url = 'https://rbozo.gitee.io/page/%s' % a
         # print(url)
-        print('---------------------------\næ­£åœ¨çˆ¬å–ç¬¬%sé¡µ' % a)
-        Blog(url)
-    print('---------------çˆ¬å–å®Œæˆ------------------')
+        print('---------------------------\nÕıÔÚÅÀÈ¡µÚ%sÒ³' % a)
+        Blog(url).foreachs()
+    print('---------------ÅÀÈ¡Íê³É------------------')
     print(result_json)
     writer()
-
