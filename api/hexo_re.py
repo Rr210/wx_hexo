@@ -24,7 +24,7 @@ results = {
 
 
 def writer():
-    with open('hexo_api.json', 'w', encoding='utf8') as f:
+    with open('hexoapi.json', 'w', encoding='utf8') as f:
         json.dump(result_json, f, ensure_ascii=False)
     # f = open('hexo_api.json', mode='wb')
     # f.write(json.dump())
