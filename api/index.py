@@ -7,6 +7,7 @@ from lxml import etree
 # import sys, io
 # sys.stdout = io.TextIOWrapper(buffer=sys.stdout.buffer, encoding='utf8')
 # 定义最后的json数组
+user_blog_link = 'https://rbozo.gitee.io'
 result_json = []
 # 定义对象
 results = {
@@ -122,10 +123,5 @@ class handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(json.dumps(data,ensure_ascii=False).encode('utf-8'))
         return
-
-if __name__ == '__main__':
-    # 调用类
-    user_blog_link = 'https://rbozo.gitee.io'
-    # pageNum = Blog(user_blog_link).pagenum()
 
 
