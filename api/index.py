@@ -81,14 +81,14 @@ class Blog:
     def foreachs(self):
         print(len(self.etreehtml()))
         for i in self.etreehtml()[0:]:
-            title = re.search(
-                '<a href="(?P<link>.*?)" title="(?P<title>.*?)"><img class="post_bg".*?data-lazy-src="(?P<src>.*?)"',
-                i)  # 文章的标题
-            publish = re.search('<time class="post-meta-date-created" datetime="(?P<Ctime>.*?)" title="(?P<unencode>.*?)">',
-                                    i)  # 发布时间
-            article = re.search('<div class="content">(?P<articles>.*?)</div>', i)
-            results['article_content'] = article.group('articles').replace('\"', "'")   # 文章内容
-            results['en_publish_date'] = publish.group('Ctime')  # 转码时间
+            # title = re.search(
+            #     '<a href="(?P<link>.*?)" title="(?P<title>.*?)"><img class="post_bg".*?data-lazy-src="(?P<src>.*?)"',
+            #     i)  # 文章的标题
+            # publish = re.search('<time class="post-meta-date-created" datetime="(?P<Ctime>.*?)" title="(?P<unencode>.*?)">',
+            #                         i)  # 发布时间
+            # article = re.search('<div class="content">(?P<articles>.*?)</div>', i)
+            # results['article_content'] = article.group('articles').replace('\"', "'")   # 文章内容
+            # results['en_publish_date'] = publish.group('Ctime')  # 转码时间
             results['publish_date'] = publish.group('unencode')  # 未经过转码时间
             results['title'] = title.group('title')  # 文章标题
             results['cover'] = title.group('src')  # 图片地址
