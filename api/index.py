@@ -56,20 +56,20 @@ class Blog:
         return content
 
     # 解析子页面
-    def childpage(self, child_url):
-        text = re.search('<div id="post-meta">(?P<Gcon>.*?)</div></div>', self.req(child_url))
-        publish = re.search('<time class="post-meta-date-created" datetime="(?P<Ctime>.*?)" title="(?P<unencode>.*?)">',
-                            text.group('Gcon'))  # 发布时间
-        update = re.search('<time class="post-meta-date-updated" datetime="(?P<Ctime>.*?)" title="(?P<unencode>.*?)">',
-                           text.group('Gcon'))  # 更新时间
-        word_count = re.search('<span class="word-count">(?P<wordCount>.*?)</span>', text.group('Gcon'))  # 文章字数
-        read_t = re.search('<span class="post-meta-label">.*?</span><span>(?P<TR>.*?)</span></span>',text.group('Gcon'))
-        results['en_publish_date'] = publish.group('Ctime')  # 转码时间
-        results['publish_date'] = publish.group('unencode')  # 未经过转码时间
-        results['en_update_date'] = update.group('Ctime')  # 未经过转码时间
-        results['update_date'] = update.group('unencode')  # 未经过转码时间
-        results['article_wordCounts'] = word_count.group('wordCount')  # 文章字数
-        results['read_time'] = read_t.group('TR')  # 文章阅读时长
+    # def childpage(self, child_url):
+    #     text = re.search('<div id="post-meta">(?P<Gcon>.*?)</div></div>', self.req(child_url))
+    #     publish = re.search('<time class="post-meta-date-created" datetime="(?P<Ctime>.*?)" title="(?P<unencode>.*?)">',
+    #                         text.group('Gcon'))  # 发布时间
+    #     update = re.search('<time class="post-meta-date-updated" datetime="(?P<Ctime>.*?)" title="(?P<unencode>.*?)">',
+    #                        text.group('Gcon'))  # 更新时间
+    #     word_count = re.search('<span class="word-count">(?P<wordCount>.*?)</span>', text.group('Gcon'))  # 文章字数
+    #     read_t = re.search('<span class="post-meta-label">.*?</span><span>(?P<TR>.*?)</span></span>',text.group('Gcon'))
+    #     results['en_publish_date'] = publish.group('Ctime')  # 转码时间
+    #     results['publish_date'] = publish.group('unencode')  # 未经过转码时间
+    #     results['en_update_date'] = update.group('Ctime')  # 未经过转码时间
+    #     results['update_date'] = update.group('unencode')  # 未经过转码时间
+    #     results['article_wordCounts'] = word_count.group('wordCount')  # 文章字数
+    #     results['read_time'] = read_t.group('TR')  # 文章阅读时长
         # try:
         #     article = re.search('<article class="post-content" id="article-container">(?P<articles>.*?)</article>', self.req(child_url))
         #     results['article_content'] = article.group('articles').replace('\"', "'")   # 文章内容
@@ -84,10 +84,15 @@ class Blog:
             title = re.search(
                 '<a href="(?P<link>.*?)" title="(?P<title>.*?)"><img class="post_bg".*?data-lazy-src="(?P<src>.*?)"',
                 i)  # 文章的标题
+            publish = re.search('<time class="post-meta-date-created" datetime="(?P<Ctime>.*?)" title="(?P<unencode>.*?)">',
+                                    i)  # 发布时间
+            article = re.search('<div class="content">(?P<articles>.*?)</div>', i)
+            results['article_content'] = article.group('articles').replace('\"', "'")   # 文章内容
+            results['en_publish_date'] = publish.group('Ctime')  # 转码时间
+            results['publish_date'] = publish.group('unencode')  # 未经过转码时间
             results['title'] = title.group('title')  # 文章标题
             results['cover'] = title.group('src')  # 图片地址
             results['title_url'] = title.group('link')  # 文章地址
-            self.childpage(results['title_url'])
             result_json.append(dict(results))
         return result_json
 
