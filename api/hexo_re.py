@@ -102,7 +102,6 @@ if __name__ == '__main__':
     user_blog_link = 'https://rbozo.gitee.io'
     pageNum = Blog(user_blog_link).pagenum()
     # for a in range(1, pageNum + 1):
-
     print('---------------爬取完成------------------')
     print(result_json)
     writer()

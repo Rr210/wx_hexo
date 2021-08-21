@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 import json
 from http.server import BaseHTTPRequestHandler
-from hexo_re import Blog
+from .hexo_re import Blog
 
 
 def list_split(items, n):
@@ -22,7 +22,7 @@ def getdata(name):
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.path
-        user = path.split('?')[1]
+        user = path.split('?=')[1]
         data = getdata(user)
         self.send_response(200)
         self.send_header('Access-Control-Allow-Origin', '*')
